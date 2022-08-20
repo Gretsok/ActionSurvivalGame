@@ -9,22 +9,36 @@ namespace ASG.Gameplay.Character
         private int VERTICAL_MOVEMENT = Animator.StringToHash("VerticalMovement");
         #endregion
         [Header("Refs")]
-        [SerializeField, HideInInspector]
-        private AInputsHandler m_inputsHandler = null;
         [SerializeField]
         private Animator m_animator = null;
+        private NetworkCharacterControllerPrototype m_characterController = null;
 
         private Vector3 m_movementInputs;
         [Header("Params")]
         [SerializeField]
         private float m_movementSmoothValue;
 
-        private void get_inputs()
+        private Vector3 m_lastFlatPosition = default;
+
+        private void Awake()
         {
-            m_movementInputs = transform.InverseTransformDirection(new Vector3(m_inputsHandler.MovementInputs.x, 0f, m_inputsHandler.MovementInputs.y));
+            m_characterController = GetComponent<NetworkCharacterControllerPrototype>();
+            m_lastFlatPosition = new Vector3(transform.position.x, 0f, transform.position.z);
         }
 
-        private void Update()
+        private void get_inputs()
+        {
+            /*m_movementInputs = Vector3.Slerp(m_movementInputs,
+                transform.InverseTransformDirection(new Vector3(m_inputsHandler.MovementInputs.x, 0f, m_inputsHandler.MovementInputs.y)),
+                m_movementSmoothValue * Time.deltaTime);*/
+            Vector3 flatPosition = new Vector3(transform.position.x, 0f, transform.position.z);
+            m_movementInputs = Vector3.Slerp(m_movementInputs,
+                transform.InverseTransformDirection(((flatPosition - m_lastFlatPosition) / Time.deltaTime) / 5f),
+                m_movementSmoothValue * Time.deltaTime);
+            m_lastFlatPosition = flatPosition;
+        }
+
+        private void LateUpdate()
         {
             get_inputs();
             apply_animations();
@@ -36,23 +50,5 @@ namespace ASG.Gameplay.Character
             m_animator.SetFloat(VERTICAL_MOVEMENT, m_movementInputs.z);
         }
 
-
-#if UNITY_EDITOR
-        private void OnValidate()
-        {
-            if (m_inputsHandler == null)
-            {
-                if (TryGetComponent(out AInputsHandler l_inputsHandler))
-                {
-                    m_inputsHandler = l_inputsHandler;
-                    UnityEditor.EditorUtility.SetDirty(this);
-                }
-                else
-                {
-                    Debug.LogError($"Could not find an Inputs Handler on gameobject {gameObject.name} while it must have one");
-                }
-            }
-        }
-#endif
     }
 }
