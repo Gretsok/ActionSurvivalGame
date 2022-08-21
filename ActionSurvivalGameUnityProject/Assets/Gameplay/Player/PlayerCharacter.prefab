@@ -98,7 +98,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_animator: {fileID: 5166388110340038395}
-  m_movementSmoothValue: 10
+  m_movementSmoothValue: 8
 --- !u!114 &116851206
 MonoBehaviour:
   m_ObjectHideFlags: 0

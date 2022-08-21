@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Fusion100/Scenes/FusionTest.unity
-    guid: 5d9ceb082c7cc8d4e8b2ae63ef22e4d5
+    path: Assets/MainMenu/MainMenu.unity
+    guid: 2037c7ea96448374e86a75fc5d395aa3
+  - enabled: 1
+    path: Assets/Gameplay/GameplayScene.unity
+    guid: 3391cdae329a2a246a97d90440a93b74
   m_configObjects: {}
