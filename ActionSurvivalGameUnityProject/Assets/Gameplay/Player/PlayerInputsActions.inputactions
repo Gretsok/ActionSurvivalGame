@@ -158,6 +158,94 @@
                     "isPartOfComposite": true
                 }
             ]
+        },
+        {
+            "name": "Building",
+            "id": "613c3426-c1a4-42a1-9aae-4e4c020ca8fe",
+            "actions": [
+                {
+                    "name": "PlaceCurrentBuilding",
+                    "type": "Button",
+                    "id": "91519161-18f0-4522-b42f-49901ec8c31f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ToggleBuildingMode",
+                    "type": "Button",
+                    "id": "47734993-b40b-49c6-9e0f-0c84a46ec9a1",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SwitchToNextBuilding",
+                    "type": "Button",
+                    "id": "37aa1af7-5708-4a65-b7a9-39a5d5e43700",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SwitchToPreviousBuilding",
+                    "type": "Button",
+                    "id": "fde9ccf6-534b-4fa5-b448-4d016f5c5a15",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "c0760b50-b000-4e1b-abb6-8f732ce5230c",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PlaceCurrentBuilding",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "405ab024-1182-4bdc-9cb6-32813c827cac",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ToggleBuildingMode",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d961a616-2879-46f4-8741-b65b557dd867",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SwitchToPreviousBuilding",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b6e1c89e-060a-4a30-add7-e142b2f0b924",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SwitchToNextBuilding",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": []

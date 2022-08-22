@@ -2,6 +2,7 @@ using ASG.Gameplay.Character;
 using Fusion;
 using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace ASG.Gameplay.Player
 {
@@ -11,6 +12,7 @@ namespace ASG.Gameplay.Player
 
         public virtual Vector2 LocalMovementInputs { get; protected set; } = default;
         public virtual Vector2 LocalLookAroundInputs { get; protected set; } = default;
+
 
         public override void Spawned()
         {
@@ -30,11 +32,22 @@ namespace ASG.Gameplay.Player
         private void RegisterInputsEvents()
         {
             if (!HasInputAuthority) return;
+
+            m_actions.Building.PlaceCurrentBuilding.started += HandlePlaceCurrentBuildingStarted;
+            m_actions.Building.ToggleBuildingMode.started += HandleToggleBuildingModeStarted;
+            m_actions.Building.SwitchToNextBuilding.started += HandleSwitchToNextBuildingStarted;
+            m_actions.Building.SwitchToPreviousBuilding.started += HandleSwitchToPreviousBuildingStarted;
         }
+
 
         private void UnregisterInputsEvents()
         {
             if (!HasInputAuthority) return;
+
+            m_actions.Building.PlaceCurrentBuilding.started -= HandlePlaceCurrentBuildingStarted;
+            m_actions.Building.ToggleBuildingMode.started -= HandleToggleBuildingModeStarted;
+            m_actions.Building.SwitchToNextBuilding.started -= HandleSwitchToNextBuildingStarted;
+            m_actions.Building.SwitchToPreviousBuilding.started -= HandleSwitchToPreviousBuildingStarted;
         }
 
         private void read_local_inputs()
@@ -96,5 +109,54 @@ namespace ASG.Gameplay.Player
             if (!HasInputAuthority) return;
             m_actions.Disable();
         }
+
+        #region Inputs Events Handling
+        private void HandleSwitchToPreviousBuildingStarted(InputAction.CallbackContext obj)
+        {
+            RPC_SwitchToPreviousBuilding();
+        }
+
+        private void HandleSwitchToNextBuildingStarted(InputAction.CallbackContext obj)
+        {
+            RPC_SwitchToNextBuilding();
+        }
+
+        private void HandleToggleBuildingModeStarted(InputAction.CallbackContext obj)
+        {
+            RPC_ToggleBuildingModeStarted();
+        }
+
+        private void HandlePlaceCurrentBuildingStarted(InputAction.CallbackContext obj)
+        {
+            RPC_PlaceCurrentBuilding();
+        }
+
+        #region RPCs
+        [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+        public void RPC_SwitchToPreviousBuilding()
+        {
+            OnSwitchToPreviousBuildingAsked?.Invoke();
+        }
+
+        [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+        public void RPC_SwitchToNextBuilding()
+        {
+            OnSwitchToNextBuildingAsked?.Invoke();
+        }
+
+        [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+        public void RPC_ToggleBuildingModeStarted()
+        {
+            OnToggleBuildingModeAsked?.Invoke();
+        }
+
+        [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+        public void RPC_PlaceCurrentBuilding()
+        {
+            OnPlaceCurrentBuildingAsked?.Invoke();
+        }
+        #endregion
+
+        #endregion
     }
 }

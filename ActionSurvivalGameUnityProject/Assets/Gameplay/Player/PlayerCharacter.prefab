@@ -15,6 +15,8 @@ GameObject:
   - component: {fileID: 4951279494875894202}
   - component: {fileID: 116851206}
   - component: {fileID: 116851209}
+  - component: {fileID: 7710597827030407158}
+  - component: {fileID: 4713237738496455624}
   m_Layer: 0
   m_Name: PlayerCharacter
   m_TagString: Untagged
@@ -124,6 +126,8 @@ MonoBehaviour:
   - {fileID: 4951279494875894207}
   - {fileID: 4951279494875894204}
   - {fileID: 116851209}
+  - {fileID: 7710597827030407158}
+  - {fileID: 4713237738496455624}
   SimulationBehaviours: []
 --- !u!114 &116851209
 MonoBehaviour:
@@ -159,6 +163,36 @@ MonoBehaviour:
   rotationSpeed: 0
   _IsGrounded: 0
   _Velocity: {x: 0, y: 0, z: 0}
+--- !u!114 &7710597827030407158
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4951279494875894209}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4751d18a83784c94180c5182e2f939c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _interpolationDataSource: 0
+  m_defaultElementData:
+  - {fileID: 11400000, guid: 1cf49ee13183a8749aa3451264441dbd, type: 2}
+  - {fileID: 11400000, guid: 427a3b540d89e3746a1836ff4544ca5b, type: 2}
+--- !u!114 &4713237738496455624
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4951279494875894209}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6933cb132f9e7734eb4184c80b0ed8de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _interpolationDataSource: 0
+  m_inputsHandler: {fileID: 4951279494875894204}
 --- !u!1 &4951279495425020954
 GameObject:
   m_ObjectHideFlags: 0

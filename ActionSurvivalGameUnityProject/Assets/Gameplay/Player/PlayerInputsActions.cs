@@ -180,6 +180,94 @@ public partial class @PlayerInputsActions : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 }
             ]
+        },
+        {
+            ""name"": ""Building"",
+            ""id"": ""613c3426-c1a4-42a1-9aae-4e4c020ca8fe"",
+            ""actions"": [
+                {
+                    ""name"": ""PlaceCurrentBuilding"",
+                    ""type"": ""Button"",
+                    ""id"": ""91519161-18f0-4522-b42f-49901ec8c31f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ToggleBuildingMode"",
+                    ""type"": ""Button"",
+                    ""id"": ""47734993-b40b-49c6-9e0f-0c84a46ec9a1"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SwitchToNextBuilding"",
+                    ""type"": ""Button"",
+                    ""id"": ""37aa1af7-5708-4a65-b7a9-39a5d5e43700"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SwitchToPreviousBuilding"",
+                    ""type"": ""Button"",
+                    ""id"": ""fde9ccf6-534b-4fa5-b448-4d016f5c5a15"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""c0760b50-b000-4e1b-abb6-8f732ce5230c"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PlaceCurrentBuilding"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""405ab024-1182-4bdc-9cb6-32813c827cac"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToggleBuildingMode"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d961a616-2879-46f4-8741-b65b557dd867"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwitchToPreviousBuilding"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b6e1c89e-060a-4a30-add7-e142b2f0b924"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwitchToNextBuilding"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -188,6 +276,12 @@ public partial class @PlayerInputsActions : IInputActionCollection2, IDisposable
         m_Movement = asset.FindActionMap("Movement", throwIfNotFound: true);
         m_Movement_Movement = m_Movement.FindAction("Movement", throwIfNotFound: true);
         m_Movement_LookAround = m_Movement.FindAction("LookAround", throwIfNotFound: true);
+        // Building
+        m_Building = asset.FindActionMap("Building", throwIfNotFound: true);
+        m_Building_PlaceCurrentBuilding = m_Building.FindAction("PlaceCurrentBuilding", throwIfNotFound: true);
+        m_Building_ToggleBuildingMode = m_Building.FindAction("ToggleBuildingMode", throwIfNotFound: true);
+        m_Building_SwitchToNextBuilding = m_Building.FindAction("SwitchToNextBuilding", throwIfNotFound: true);
+        m_Building_SwitchToPreviousBuilding = m_Building.FindAction("SwitchToPreviousBuilding", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -284,9 +378,73 @@ public partial class @PlayerInputsActions : IInputActionCollection2, IDisposable
         }
     }
     public MovementActions @Movement => new MovementActions(this);
+
+    // Building
+    private readonly InputActionMap m_Building;
+    private IBuildingActions m_BuildingActionsCallbackInterface;
+    private readonly InputAction m_Building_PlaceCurrentBuilding;
+    private readonly InputAction m_Building_ToggleBuildingMode;
+    private readonly InputAction m_Building_SwitchToNextBuilding;
+    private readonly InputAction m_Building_SwitchToPreviousBuilding;
+    public struct BuildingActions
+    {
+        private @PlayerInputsActions m_Wrapper;
+        public BuildingActions(@PlayerInputsActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @PlaceCurrentBuilding => m_Wrapper.m_Building_PlaceCurrentBuilding;
+        public InputAction @ToggleBuildingMode => m_Wrapper.m_Building_ToggleBuildingMode;
+        public InputAction @SwitchToNextBuilding => m_Wrapper.m_Building_SwitchToNextBuilding;
+        public InputAction @SwitchToPreviousBuilding => m_Wrapper.m_Building_SwitchToPreviousBuilding;
+        public InputActionMap Get() { return m_Wrapper.m_Building; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(BuildingActions set) { return set.Get(); }
+        public void SetCallbacks(IBuildingActions instance)
+        {
+            if (m_Wrapper.m_BuildingActionsCallbackInterface != null)
+            {
+                @PlaceCurrentBuilding.started -= m_Wrapper.m_BuildingActionsCallbackInterface.OnPlaceCurrentBuilding;
+                @PlaceCurrentBuilding.performed -= m_Wrapper.m_BuildingActionsCallbackInterface.OnPlaceCurrentBuilding;
+                @PlaceCurrentBuilding.canceled -= m_Wrapper.m_BuildingActionsCallbackInterface.OnPlaceCurrentBuilding;
+                @ToggleBuildingMode.started -= m_Wrapper.m_BuildingActionsCallbackInterface.OnToggleBuildingMode;
+                @ToggleBuildingMode.performed -= m_Wrapper.m_BuildingActionsCallbackInterface.OnToggleBuildingMode;
+                @ToggleBuildingMode.canceled -= m_Wrapper.m_BuildingActionsCallbackInterface.OnToggleBuildingMode;
+                @SwitchToNextBuilding.started -= m_Wrapper.m_BuildingActionsCallbackInterface.OnSwitchToNextBuilding;
+                @SwitchToNextBuilding.performed -= m_Wrapper.m_BuildingActionsCallbackInterface.OnSwitchToNextBuilding;
+                @SwitchToNextBuilding.canceled -= m_Wrapper.m_BuildingActionsCallbackInterface.OnSwitchToNextBuilding;
+                @SwitchToPreviousBuilding.started -= m_Wrapper.m_BuildingActionsCallbackInterface.OnSwitchToPreviousBuilding;
+                @SwitchToPreviousBuilding.performed -= m_Wrapper.m_BuildingActionsCallbackInterface.OnSwitchToPreviousBuilding;
+                @SwitchToPreviousBuilding.canceled -= m_Wrapper.m_BuildingActionsCallbackInterface.OnSwitchToPreviousBuilding;
+            }
+            m_Wrapper.m_BuildingActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @PlaceCurrentBuilding.started += instance.OnPlaceCurrentBuilding;
+                @PlaceCurrentBuilding.performed += instance.OnPlaceCurrentBuilding;
+                @PlaceCurrentBuilding.canceled += instance.OnPlaceCurrentBuilding;
+                @ToggleBuildingMode.started += instance.OnToggleBuildingMode;
+                @ToggleBuildingMode.performed += instance.OnToggleBuildingMode;
+                @ToggleBuildingMode.canceled += instance.OnToggleBuildingMode;
+                @SwitchToNextBuilding.started += instance.OnSwitchToNextBuilding;
+                @SwitchToNextBuilding.performed += instance.OnSwitchToNextBuilding;
+                @SwitchToNextBuilding.canceled += instance.OnSwitchToNextBuilding;
+                @SwitchToPreviousBuilding.started += instance.OnSwitchToPreviousBuilding;
+                @SwitchToPreviousBuilding.performed += instance.OnSwitchToPreviousBuilding;
+                @SwitchToPreviousBuilding.canceled += instance.OnSwitchToPreviousBuilding;
+            }
+        }
+    }
+    public BuildingActions @Building => new BuildingActions(this);
     public interface IMovementActions
     {
         void OnMovement(InputAction.CallbackContext context);
         void OnLookAround(InputAction.CallbackContext context);
+    }
+    public interface IBuildingActions
+    {
+        void OnPlaceCurrentBuilding(InputAction.CallbackContext context);
+        void OnToggleBuildingMode(InputAction.CallbackContext context);
+        void OnSwitchToNextBuilding(InputAction.CallbackContext context);
+        void OnSwitchToPreviousBuilding(InputAction.CallbackContext context);
     }
 }
