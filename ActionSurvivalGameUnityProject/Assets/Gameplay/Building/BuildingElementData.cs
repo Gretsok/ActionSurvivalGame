@@ -15,6 +15,7 @@ namespace ASG.Gameplay.Building
             public string name;
             public Sprite icon;
             public string description;
+            public EBuildingType buildingType;
         }
 
         [SerializeField]
@@ -24,11 +25,6 @@ namespace ASG.Gameplay.Building
         [SerializeField]
         private Fusion.NetworkPrefabRef m_buildingElementPrefab = default;
         public Fusion.NetworkPrefabRef buildingElementPrefab => m_buildingElementPrefab;
-
-        public Vector3 GetClosestValidPositions(Vector3 a_positions)
-        {
-            return default;
-        }
 
 #if UNITY_EDITOR
         public void EditorOnly_GenerateRandomDataID()

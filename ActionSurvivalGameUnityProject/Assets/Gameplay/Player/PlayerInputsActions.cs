@@ -268,6 +268,34 @@ public partial class @PlayerInputsActions : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Cursor"",
+            ""id"": ""f606ec35-e2ae-4504-946d-073664411beb"",
+            ""actions"": [
+                {
+                    ""name"": ""CursorMovement"",
+                    ""type"": ""Value"",
+                    ""id"": ""8713ed8b-b317-45e1-b090-7b4e32860119"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""467eb304-adec-4eb8-a02b-dc28974bfd63"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CursorMovement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -282,6 +310,9 @@ public partial class @PlayerInputsActions : IInputActionCollection2, IDisposable
         m_Building_ToggleBuildingMode = m_Building.FindAction("ToggleBuildingMode", throwIfNotFound: true);
         m_Building_SwitchToNextBuilding = m_Building.FindAction("SwitchToNextBuilding", throwIfNotFound: true);
         m_Building_SwitchToPreviousBuilding = m_Building.FindAction("SwitchToPreviousBuilding", throwIfNotFound: true);
+        // Cursor
+        m_Cursor = asset.FindActionMap("Cursor", throwIfNotFound: true);
+        m_Cursor_CursorMovement = m_Cursor.FindAction("CursorMovement", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -435,6 +466,39 @@ public partial class @PlayerInputsActions : IInputActionCollection2, IDisposable
         }
     }
     public BuildingActions @Building => new BuildingActions(this);
+
+    // Cursor
+    private readonly InputActionMap m_Cursor;
+    private ICursorActions m_CursorActionsCallbackInterface;
+    private readonly InputAction m_Cursor_CursorMovement;
+    public struct CursorActions
+    {
+        private @PlayerInputsActions m_Wrapper;
+        public CursorActions(@PlayerInputsActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @CursorMovement => m_Wrapper.m_Cursor_CursorMovement;
+        public InputActionMap Get() { return m_Wrapper.m_Cursor; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(CursorActions set) { return set.Get(); }
+        public void SetCallbacks(ICursorActions instance)
+        {
+            if (m_Wrapper.m_CursorActionsCallbackInterface != null)
+            {
+                @CursorMovement.started -= m_Wrapper.m_CursorActionsCallbackInterface.OnCursorMovement;
+                @CursorMovement.performed -= m_Wrapper.m_CursorActionsCallbackInterface.OnCursorMovement;
+                @CursorMovement.canceled -= m_Wrapper.m_CursorActionsCallbackInterface.OnCursorMovement;
+            }
+            m_Wrapper.m_CursorActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @CursorMovement.started += instance.OnCursorMovement;
+                @CursorMovement.performed += instance.OnCursorMovement;
+                @CursorMovement.canceled += instance.OnCursorMovement;
+            }
+        }
+    }
+    public CursorActions @Cursor => new CursorActions(this);
     public interface IMovementActions
     {
         void OnMovement(InputAction.CallbackContext context);
@@ -446,5 +510,9 @@ public partial class @PlayerInputsActions : IInputActionCollection2, IDisposable
         void OnToggleBuildingMode(InputAction.CallbackContext context);
         void OnSwitchToNextBuilding(InputAction.CallbackContext context);
         void OnSwitchToPreviousBuilding(InputAction.CallbackContext context);
+    }
+    public interface ICursorActions
+    {
+        void OnCursorMovement(InputAction.CallbackContext context);
     }
 }

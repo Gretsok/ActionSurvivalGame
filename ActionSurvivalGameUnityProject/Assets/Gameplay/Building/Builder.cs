@@ -40,8 +40,11 @@ namespace ASG.Gameplay.Building
             Debug.Log($"Place current building as Player :{Object.InputAuthority}");
             if(m_isActivated)
             {
-                Runner.Spawn(m_buildingInventory.GetBuildingElementData(m_currentIndex).buildingElementPrefab,
-                    position: m_buildingInventory.GetBuildingElementData(m_currentIndex).GetClosestValidPositions(Vector3.zero));
+                Vector3 positionToBuild = transform.TransformPoint(BuildingUtils.BUILDING_OFFSET_TO_CHARACTER);
+                var data = m_buildingInventory.GetBuildingElementData(m_currentIndex);
+                Runner.Spawn(data.buildingElementPrefab,
+                    position: BuildingUtils.GetClosestValidPositions(data.MetaData.buildingType, positionToBuild),
+                    rotation: BuildingUtils.GetValidRotation(data.MetaData.buildingType, transform.rotation));
             }
         }
 
