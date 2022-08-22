@@ -1,4 +1,3 @@
-using Fusion;
 using System.Collections;
 using UnityEngine;
 
@@ -26,10 +25,10 @@ namespace ASG.Gameplay.Flow
                 yield return null;
             }
 
-            NetworkObject localPlayerCharacter = null;
+            Player.PlayerInputsHandler localPlayerCharacter = null;
             while(localPlayerCharacter == null)
             {
-                localPlayerCharacter = callbacksManager.GetLocalPlayerCharacter();
+                localPlayerCharacter = callbacksManager.LocalInputsHandler;
                 /*
                  * Does not work, maybe get all players and try 
                  * to look for the one to which we have input authority over

@@ -13,6 +13,14 @@ public class NetworkCallbacksManager : MonoBehaviour, INetworkRunnerCallbacks
     private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
 
     private PlayerInputsHandler m_localInputsHandler = null;
+    public PlayerInputsHandler LocalInputsHandler
+    {
+        get
+        {
+            CheckLocalCharacter();
+            return m_localInputsHandler;
+        }
+    }
 
     private void Start()
     {
@@ -124,15 +132,4 @@ public class NetworkCallbacksManager : MonoBehaviour, INetworkRunnerCallbacks
         // Keep track of the player avatars so we can remove it when they disconnect
         _spawnedCharacters.Add(player, networkPlayerObject);
     }
-
-    #region Accessors
-    public NetworkObject GetLocalPlayerCharacter()
-    {
-        if(_spawnedCharacters.TryGetValue(GetComponent<NetworkRunner>().LocalPlayer, out NetworkObject l_obj))
-        {
-            return l_obj;
-        }
-        return null;
-    }
-    #endregion
 }
